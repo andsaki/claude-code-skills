@@ -22,6 +22,31 @@ GitHub issueを読み取り、**完全自動で実装からPR作成、Issueコ�
 
 ## 実行手順
 
+### ステップ0: ログディレクトリの準備（start-impl 互換）
+
+`auto-implement-issue` でも start-impl と同じように進行ログ（plan/prompt）を残します。  
+リポジトリ直下に `tmp/` ディレクトリが **すでに存在する場合** は、衝突を避けるため `temp/` に作成してください。
+
+```bash
+if [ -d tmp ]; then
+  target_dir="temp/$(printf '%03d' NEXT_ID)_${ISSUE_SLUG}"
+else
+  target_dir="tmp/$(printf '%03d' NEXT_ID)_${ISSUE_SLUG}"
+fi
+
+!mkdir -p "$target_dir"
+!cat <<'EOF' > "$target_dir/plan.md"
+# 実装計画: ...
+EOF
+!cat <<'EOF' > "$target_dir/prompt.md"
+# 実装セッション: ...
+EOF
+```
+
+- `NEXT_ID` は既存ディレクトリを確認して採番。
+- `ISSUE_SLUG` は `issue-123-xxxxx` のように一意化。
+- 以降のステップではこの `target_dir` にメモを残す。
+
 ### ステップ1: Issue情報の取得
 
 Issue番号を受け取り、詳細を取得：
