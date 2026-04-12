@@ -205,7 +205,7 @@ fi
 
 **例**:
 ```markdown
-## Summary
+## 概要
 ダークモードを実装しました。
 
 Closes #123
