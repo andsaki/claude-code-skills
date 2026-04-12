@@ -13,6 +13,12 @@ allowed-tools: Read, Bash(git:*), Bash(gh:*), Edit
 - `create-pr 10` - Issue #10と紐づけてPR作成
 - `create-pr #123` - Issue #123と紐づけてPR作成
 
+## 言語ポリシー
+- PRタイトル・本文・Summary / Changes / Test plan の箇条書きは必ず日本語で記述する（英語見出しはそのままでOK）。
+- テスト結果や失敗理由も日本語で説明し、必要に応じて英語ログを引用する。
+- `gh pr create` を実行する前に、生成した日本語テキストをユーザーに共有し確認を得る。
+- フッターの `🤖 Generated with ...` は利用中のCLIに合わせて `[Codex CLI]` または `[Claude Code]` を選択する。
+
 ## 実行手順
 
 ### 0. Issue番号の取得（引数がある場合）
