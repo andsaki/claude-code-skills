@@ -108,6 +108,37 @@ Issue内容から実装計画を立て、**ユーザー確認なしで自動実�
 
 進捗表示: `🧪 [4/9] テスト・ビルド実行中...`
 
+### ステップ4.1: Playwright でのUI確認（共通スキル）
+
+テストが通ったら、ビジュアル回 regress を防ぐため Playwright で UI を検証し、ログ/スクリーンショットを残す。
+
+1. 固定ポートで開発サーバーを起動し、ログとPIDを保持
+   ```bash
+   DEV_LOG="$target_dir/dev-server.log"
+   npm run dev -- --host 127.0.0.1 --port 4173 >"$DEV_LOG" 2>&1 &
+   DEV_SERVER_PID=$!
+   ```
+2. Playwright CLI とブラウザ（Chromium/Firefox）を確実にインストール
+   ```bash
+   npx playwright install chromium firefox
+   ```
+3. スクリーンショット保存先を作成し、デスクトップ/モバイルを撮影
+   ```bash
+   mkdir -p "$target_dir/screenshots"
+   npx playwright screenshot --full-page http://127.0.0.1:4173 \
+     "$target_dir/screenshots/desktop.png"
+   npx playwright screenshot --browser=chromium --device="Pixel 5" --full-page \
+     http://127.0.0.1:4173 "$target_dir/screenshots/mobile.png"
+   ```
+4. 撮影後は dev サーバーを停止し、ポート解放を確認
+   ```bash
+   kill $DEV_SERVER_PID
+   lsof -i :4173 || true
+   ```
+5. `prompt.md` に Playwright 実行結果（ログパス/スクリーンショットパス含む）を追記
+
+Playwright が利用できない場合は理由とログを残し、ユーザーへ報告すること。
+
 ### ステップ5: エラー自動修正（必要時）
 
 エラーが発生した場合、**最大3回まで自動修正を試行**：
