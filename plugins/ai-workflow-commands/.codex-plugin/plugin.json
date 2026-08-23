@@ -1,0 +1,29 @@
+{
+  "name": "ai-workflow-commands",
+  "version": "0.1.0",
+  "description": "Personal workflow slash commands for Codex.",
+  "author": {
+    "name": "YudukiHotaru"
+  },
+  "license": "UNLICENSED",
+  "keywords": [
+    "workflow",
+    "commands",
+    "github"
+  ],
+  "interface": {
+    "displayName": "AI Workflow Commands",
+    "shortDescription": "Personal workflow slash commands",
+    "longDescription": "Adds personal Codex slash commands backed by the ai-workflow-automation skill sources.",
+    "developerName": "YudukiHotaru",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use /implement-issue to implement a GitHub issue"
+    ],
+    "brandColor": "#111827"
+  }
+}

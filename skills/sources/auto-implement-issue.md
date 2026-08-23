@@ -108,9 +108,9 @@ Issue内容から実装計画を立て、**ユーザー確認なしで自動実�
 
 進捗表示: `🧪 [4/9] テスト・ビルド実行中...`
 
-### ステップ4.1: Playwright でのUI確認（共通スキル）
+### ステップ4.1: Chrome でのUI確認（共通スキル）
 
-テストが通ったら、ビジュアル回 regress を防ぐため Playwright で UI を検証し、ログ/スクリーンショットを残す。
+テストが通ったら、ビジュアル回帰を防ぐため Chrome MCP が利用できる場合は Chrome MCP で UI を検証し、ログ/スクリーンショットを残す。Chrome MCP が利用できない環境では、ローカル Chrome のリモートデバッグまたは既存のブラウザ検証手段を使い、Playwright の追加インストールは行わない。
 
 1. 固定ポートで開発サーバーを起動し、ログとPIDを保持
    ```bash
@@ -118,26 +118,17 @@ Issue内容から実装計画を立て、**ユーザー確認なしで自動実�
    npm run dev -- --host 127.0.0.1 --port 4173 >"$DEV_LOG" 2>&1 &
    DEV_SERVER_PID=$!
    ```
-2. Playwright CLI とブラウザ（Chromium/Firefox）を確実にインストール
-   ```bash
-   npx playwright install chromium firefox
-   ```
-3. スクリーンショット保存先を作成し、デスクトップ/モバイルを撮影
-   ```bash
-   mkdir -p "$target_dir/screenshots"
-   npx playwright screenshot --full-page http://127.0.0.1:4173 \
-     "$target_dir/screenshots/desktop.png"
-   npx playwright screenshot --browser=chromium --device="Pixel 5" --full-page \
-     http://127.0.0.1:4173 "$target_dir/screenshots/mobile.png"
-   ```
-4. 撮影後は dev サーバーを停止し、ポート解放を確認
+2. Chrome MCP が利用可能か確認し、利用可能ならデスクトップ/モバイル相当の viewport でページを開いて確認する。
+3. Chrome MCP が利用できない場合は、ローカル Chrome をリモートデバッグ付きで起動してスクリーンショットを取得する。
+4. スクリーンショット保存先を作成し、デスクトップ/モバイルを撮影する。
+5. 撮影後は dev サーバーを停止し、ポート解放を確認
    ```bash
    kill $DEV_SERVER_PID
    lsof -i :4173 || true
    ```
-5. `prompt.md` に Playwright 実行結果（ログパス/スクリーンショットパス含む）を追記
+6. `prompt.md` に Chrome 検証結果（ログパス/スクリーンショットパス含む）を追記
 
-Playwright が利用できない場合は理由とログを残し、ユーザーへ報告すること。
+Chrome 検証が利用できない場合は理由とログを残し、ユーザーへ報告すること。
 
 ### ステップ5: エラー自動修正（必要時）
 
